@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Property Pulse
 
-## Getting Started
+A rental property browsing app built as a learning project. This repository currently focuses on the frontend; property data and photos are stored locally so the app can run without a database or external service accounts.
 
-First, run the development server:
+## Current features
+
+- Home page with featured and recent properties
+- Property listing with location and type filters
+- Pagination that preserves the selected filters
+- Individual property pages with rates, amenities, contact details, and photo galleries
+- Responsive page layouts and custom error / not-found pages
+
+Authentication, adding and editing listings, messages, bookmarks, image uploads, and a database are planned for later stages. Some navigation controls for these features are currently visual placeholders.
+
+## Built with
+
+- Next.js 16 (App Router), React 19, and TypeScript
+- Tailwind CSS 4 and React Icons
+- Local JSON data and images during the frontend phase
+
+## Run locally
+
+Install dependencies and start the development server:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`. No environment variables or database are required for the current version.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To check the project:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+| Path | Purpose |
+| --- | --- |
+| `app/page.tsx` | Home page |
+| `app/properties/page.tsx` | Browse, filter, and paginate properties |
+| `app/properties/[id]/page.tsx` | Property details |
+| `app/components/` | Shared UI components |
+| `data/properties.json` | Temporary sample listings |
+| `data/properties.ts` | Property type and local image helper |
+| `public/images/properties/` | Sample property photos |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Learning project credit
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This is an independent practice implementation inspired by Brad Traversy's Property Pulse project and its supplied HTML theme. It is being built step by step, with a database and other backend features to follow. The current sample photos and branding come from the reference materials.
