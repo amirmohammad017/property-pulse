@@ -1,7 +1,8 @@
 import Pagination from "../components/Pagination";
 import PropertyCard from "../components/PropertyCard";
 import PropertySearchForm from "../components/PropertySearchForm";
-import { properties } from "@/data/properties";
+import connectDb from "@/config/database";
+import Property from "@/models/Property";
 
 type SearchParams = Promise<{
   location?: string;
@@ -15,6 +16,8 @@ export default async function PropertiesPage({
 }: {
   searchParams: SearchParams;
 }) {
+  await connectDb();
+  const properties = await Property.find({}).lean();
   const {
     location = "",
     propertyType = "All",
@@ -67,6 +70,7 @@ export default async function PropertiesPage({
             <p>No properties found. Try another location or property type.</p>
           )}
 
+          {/* pagination */}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
