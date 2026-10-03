@@ -8,6 +8,7 @@ import {
   FaCheck,
   FaMapMarkerAlt,
   FaRulerCombined,
+  FaTimes,
 } from "react-icons/fa";
 import { properties, propertyImage } from "@/data/properties";
 import connectDb from "@/config/database";
@@ -75,15 +76,17 @@ export default async function PropertyPage({
                 {(["nightly", "weekly", "monthly"] as const).map((period) => (
                   <div
                     key={period}
-                    className="border-b sm:border-b-0 pb-3 sm:pb-0"
+                    className="flex justify-center items-center border-b sm:border-b-0 pb-3 sm:pb-0"
                   >
-                    <span className="text-gray-500 font-bold capitalize mr-2">
+                    <span className="text-gray-500 text-xl font-bold capitalize mr-2">
                       {period}
                     </span>
                     <span className="text-2xl font-bold text-blue-500">
-                      {property?.rates?.[period]
-                        ? `$${property.rates[period]?.toString()}`
-                        : "—"}
+                      {property.rates?.[period] ? (
+                        `$${property.rates[period]?.toString()}`
+                      ) : (
+                        <FaTimes className="text-red-700" />
+                      )}
                     </span>
                   </div>
                 ))}
