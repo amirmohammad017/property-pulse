@@ -18,7 +18,6 @@ export default async function PropertiesPage({
 }) {
   await connectDb();
   const rawProperties = await Property.find({}).lean();
-  console.log(rawProperties);
   const properties = rawProperties.map((p) => ({
     ...p,
     _id: p._id.toString(),

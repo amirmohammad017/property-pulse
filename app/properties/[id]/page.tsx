@@ -10,6 +10,8 @@ import {
   FaRulerCombined,
 } from "react-icons/fa";
 import { properties, propertyImage } from "@/data/properties";
+import connectDb from "@/config/database";
+import Property from "@/models/Property";
 
 // Generate a detail page for each property in the local data.
 export function generateStaticParams() {
@@ -21,11 +23,14 @@ export default async function PropertyPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connectDb();
   // Read the [id] route parameter and find the matching property.
   const { id } = await params;
-  const property = properties.find((item) => item._id === id);
+  const rawProperties = await Property.findById(id).lean();
   // Show the 404 page when no property matches the URL.
-  if (!property) notFound();
+  if (!rawProperties) notFound();
+
+  const property = { ...rawProperties, _id: rawProperties?._id.toString() };
 
   return (
     <>
@@ -76,7 +81,7 @@ export default async function PropertyPage({
                       {period}
                     </span>
                     <span className="text-2xl font-bold text-blue-500">
-                      {property.rates[period]
+                      {property?.rates?.[period]
                         ? `$${property.rates[period]?.toString()}`
                         : "—"}
                     </span>
@@ -125,14 +130,14 @@ export default async function PropertyPage({
               <h2 className="text-xl font-bold mb-4">
                 Contact Property Manager
               </h2>
-              <p className="font-semibold">{property.seller_info.name}</p>
+              <p className="font-semibold">{property.seller_info?.name}</p>
               <a
                 className="text-blue-600 hover:underline break-all"
-                href={`mailto:${property.seller_info.email}`}
+                href={`mailto:${property.seller_info?.email}`}
               >
-                {property.seller_info.email}
+                {property.seller_info?.email}
               </a>
-              <p className="mt-2">{property.seller_info.phone}</p>
+              <p className="mt-2">{property.seller_info?.phone}</p>
               <p className="text-sm text-gray-500 mt-4">
                 Messaging and bookmarks are coming in a later stage.
               </p>
