@@ -61,6 +61,7 @@ const PropertySchema = new Schema(
   },
 );
 type PropertyData = InferSchemaType<typeof PropertySchema>;
+export type PropertyDataWithId = PropertyData & {_id:string}
 
 const Property =
   (models.Property as Model<PropertyData> | undefined) ??

@@ -59,8 +59,8 @@ export default async function PropertyPage({
               <h1 className="text-3xl font-bold mb-4">{property.name}</h1>
               <p className="text-orange-700 flex items-start gap-2">
                 <FaMapMarkerAlt className="shrink-0 mt-1" />
-                {property.location.street}, {property.location.city},{" "}
-                {property.location.state} {property.location.zipcode}
+                {property.location?.street}, {property.location?.city},{" "}
+                {property.location?.state} {property.location?.zipcode}
               </p>
               <h2 className="text-lg font-bold my-6 bg-gray-800 text-white p-2">
                 Rates & Options
@@ -77,7 +77,7 @@ export default async function PropertyPage({
                     </span>
                     <span className="text-2xl font-bold text-blue-500">
                       {property.rates[period]
-                        ? `$${property.rates[period]?.toLocaleString()}`
+                        ? `$${property.rates[period]?.toString()}`
                         : "—"}
                     </span>
                   </div>
@@ -99,7 +99,7 @@ export default async function PropertyPage({
                 </span>
                 <span>
                   <FaRulerCombined className="inline mr-2" />
-                  {property.square_feet.toLocaleString()} sqft
+                  {property.square_feet.toString()} sqft
                 </span>
               </div>
               <p className="text-gray-600">{property.description}</p>

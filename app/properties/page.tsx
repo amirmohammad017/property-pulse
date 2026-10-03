@@ -17,7 +17,12 @@ export default async function PropertiesPage({
   searchParams: SearchParams;
 }) {
   await connectDb();
-  const properties = await Property.find({}).lean();
+  const rawProperties = await Property.find({}).lean();
+  console.log(rawProperties);
+  const properties = rawProperties.map((p) => ({
+    ...p,
+    _id: p._id.toString(),
+  }));
   const {
     location = "",
     propertyType = "All",
@@ -29,9 +34,12 @@ export default async function PropertiesPage({
       propertyType === "All" ||
       property.type.toLowerCase() === propertyType.toLowerCase();
     const searchable = [
-      property.name,
-      property.description,
-      ...Object.values(property.location),
+      property.name ?? "",
+      property.description ?? "",
+      property.location?.street ?? "",
+      property.location?.city ?? "",
+      property.location?.state ?? "",
+      property.location?.zipcode ?? "",
     ]
       .join(" ")
       .toLowerCase();

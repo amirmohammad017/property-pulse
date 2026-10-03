@@ -4,8 +4,8 @@ export type Property = {
   _id: string;
   name: string;
   type: string;
-  description: string;
-  location: { street: string; city: string; state: string; zipcode: string };
+  description?: string | null;
+  location?: { street: string; city: string; state: string; zipcode: string } | null | undefined;
   beds: number;
   baths: number;
   square_feet: number;
