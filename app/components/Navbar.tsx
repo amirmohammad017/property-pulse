@@ -3,22 +3,30 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/images/logo-white.png";
-import { useSession, getProviders, ClientSafeProvider } from "next-auth/react";
+import {
+  useSession,
+  getProviders,
+  ClientSafeProvider,
+  signIn,
+  signOut,
+} from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const Navbar = () => {
   const [providers, setProviders] = useState<Record<
     string,
     ClientSafeProvider
   > | null>(null);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const pathName = usePathname();
   const { data: session } = useSession();
+  console.log(session);
 
   useEffect(() => {
     const setAuthProviders = async () => {
       const res = await getProviders();
       setProviders(res);
-      console.log(res);
     };
     setAuthProviders();
   }, []);
@@ -98,12 +106,18 @@ const Navbar = () => {
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
           <div className="hidden md:block md:ml-6">
-            {!session && (
-              <div className="flex items-center">
-                <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">
-                  <i className="fa-brands fa-google text-white mr-2"></i>
-                  <span>Login or Register</span>
-                </button>
+            {!session && providers && (
+              <div className="flex items-center gap-2">
+                {Object.values(providers).map((provider) => (
+                  <button
+                    key={provider.id}
+                    onClick={() => signIn(provider.id)}
+                    className={`flex gap-2 items-center justify-center text-white rounded-md px-3 py-2 text-sm font-medium transition bg-gray-700 hover:bg-gray-900 `}
+                  >
+                    {provider.id === "github" ? <FaGithub /> : <></>}
+                    <span>Login with {provider.name}</span>
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -143,59 +157,66 @@ const Navbar = () => {
                 <div>
                   <button
                     type="button"
-                    className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="relative flex rounded-full bg-gray-800 text-sm shadow-md transition hover:ring-2 hover:ring-white/70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     id="user-menu-button"
                     aria-expanded="false"
                     aria-haspopup="true"
+                    onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                   >
                     <span className="absolute -inset-1.5"></span>
                     <span className="sr-only">Open user menu</span>
                     <Image
                       width={0}
                       height={0}
-                      className="h-8 w-8 rounded-full"
+                      className="h-9 w-9 rounded-full object-cover"
                       src="/images/profile.png"
                       alt=""
                     />
                   </button>
                 </div>
 
-                {/* <!-- Profile dropdown --> */}
-                <div
-                  id="user-menu"
-                  className="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu-button"
-                  tabIndex={-1}
-                >
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700"
-                    role="menuitem"
+                {/* Profile dropdown */}
+                {isProfileMenuOpen && (
+                  <div
+                    id="user-menu"
+                    className="absolute right-0 z-10 mt-3 w-56 origin-top-right overflow-hidden rounded-xl border border-gray-100 bg-white py-2 shadow-xl ring-1 ring-black/5 focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu-button"
                     tabIndex={-1}
-                    id="user-menu-item-0"
                   >
-                    Your Profile
-                  </Link>
-                  <Link
-                    href="/saved-properties"
-                    className="block px-4 py-2 text-sm text-gray-700"
-                    role="menuitem"
-                    tabIndex={-1}
-                    id="user-menu-item-2"
-                  >
-                    Saved Properties
-                  </Link>
-                  <button
-                    className="block px-4 py-2 text-sm text-gray-700"
-                    role="menuitem"
-                    tabIndex={-1}
-                    id="user-menu-item-2"
-                  >
-                    Sign Out
-                  </button>
-                </div>
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-blue-700"
+                      role="menuitem"
+                      tabIndex={-1}
+                      id="user-menu-item-0"
+                    >
+                      Your Profile
+                    </Link>
+
+                    <Link
+                      href="/saved-properties"
+                      className="block px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-blue-700"
+                      role="menuitem"
+                      tabIndex={-1}
+                      id="user-menu-item-2"
+                    >
+                      Saved Properties
+                    </Link>
+
+                    <div className="my-1 border-t border-gray-100" />
+
+                    <button
+                      className="block w-full px-4 py-3 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                      role="menuitem"
+                      tabIndex={-1}
+                      id="user-menu-item-2"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -227,13 +248,15 @@ const Navbar = () => {
           )}
           {!session &&
             providers &&
-            Object.values(providers).map((item) => (
+            Object.values(providers).map((provider) => (
               <button
-                key={item.id}
-                className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-5"
+                key={provider.id}
+                onClick={() => signIn(provider.id)}
+                className={`flex items-center text-white rounded-md px-3 py-2 my-2 w-full text-sm font-medium bg-gray-700 hover:bg-gray-900 `}
               >
-                <i className="fa-brands fa-google mr-2"></i>
-                <span>Login or Register</span>
+                {provider.id === "github" && <FaGithub />}
+                {provider.id === "google" && <FaGoogle />}
+                <span>Login with {provider.name}</span>
               </button>
             ))}
         </div>

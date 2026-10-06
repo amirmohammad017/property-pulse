@@ -1,5 +1,6 @@
+import connectDb from "@/config/database";
+import User from "@/models/User";
 import GitHub from "next-auth/providers/github";
-import { signIn } from "next-auth/react";
 
 export const authOptions = {
   providers: [
@@ -10,10 +11,20 @@ export const authOptions = {
   ],
   callbacks: {
     // invoked on successful sign in
-    async signIn() {
+    async signIn({ profile }) {
       // 1 connect to the data base
+      await connectDb();
       // 2 check if user exists.
+      console.log(profile);
+      const user = await User.findOne({ email: profile.email });
+
       // 3 if not create new user
+      // if (!user) {
+      //   User.create({
+      //     email: profile.email,
+      //     username: profile.username,
+      //   });
+      // }
       // 4 return true to allow sign in
       return true;
     },
