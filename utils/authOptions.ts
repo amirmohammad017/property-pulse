@@ -1,17 +1,20 @@
 import connectDb from "@/config/database";
 import User from "@/models/User";
-import GitHub from "next-auth/providers/github";
+import GitHub, { GithubProfile } from "next-auth/providers/github";
+import { AuthOptions } from "next-auth";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     GitHub({
       clientId: process.env.GITHUB_AUTH_CLIENT_ID!,
       clientSecret: process.env.GITHUB_AUTH_CLIENT_SECRET!,
+      authorization: { params: { scope: "read:user user:email" } },
     }),
   ],
   callbacks: {
     // invoked on successful sign in
-    async signIn({ profile }) {
+    async signIn({ profile }: { profile: GithubProfile }) {
+      if (!profile) return false;
       // 1 connect to the data base
       await connectDb();
       // 2 check if user exists.
@@ -22,8 +25,8 @@ export const authOptions = {
       if (!user) {
         try {
           await User.create({
-            email: profile.login,
-            username: profile.email,
+            email: profile.email,
+            username: profile.login,
             image: profile.avatar_url,
           });
         } catch (error) {
@@ -33,12 +36,13 @@ export const authOptions = {
       // 4 return true to allow sign in
       return true;
     },
-    async sesssion({ session }) {
+    async session({ session }) {
       // get user from data base
-      const user = await User.findOne({ email: session.email });
+      console.log(session);
+      const user = await User.findOne({ email: session.user.email });
       if (!user) return;
       // assign user id from the session
-      
+
       // return session
       if (session.user) return session;
     },
