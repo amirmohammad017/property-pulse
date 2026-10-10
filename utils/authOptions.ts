@@ -19,18 +19,26 @@ export const authOptions = {
       const user = await User.findOne({ email: profile.email });
 
       // 3 if not create new user
-      // if (!user) {
-      //   User.create({
-      //     email: profile.email,
-      //     username: profile.username,
-      //   });
-      // }
+      if (!user) {
+        try {
+          await User.create({
+            email: profile.login,
+            username: profile.email,
+            image: profile.avatar_url,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
       // 4 return true to allow sign in
       return true;
     },
-    async sesssion({ session, user }) {
+    async sesssion({ session }) {
       // get user from data base
+      const user = await User.findOne({ email: session.email });
+      if (!user) return;
       // assign user id from the session
+      
       // return session
       if (session.user) return session;
     },

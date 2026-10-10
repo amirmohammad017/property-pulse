@@ -21,7 +21,6 @@ const Navbar = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const pathName = usePathname();
   const { data: session } = useSession();
-  console.log(session);
 
   useEffect(() => {
     const setAuthProviders = async () => {
@@ -212,6 +211,10 @@ const Navbar = () => {
                       role="menuitem"
                       tabIndex={-1}
                       id="user-menu-item-2"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        signOut();
+                      }}
                     >
                       Sign Out
                     </button>
