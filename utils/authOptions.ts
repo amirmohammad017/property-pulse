@@ -13,38 +13,37 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     // invoked on successful sign in
-    async signIn({ profile }: { profile: GithubProfile }) {
+    async signIn({ profile }) {
       if (!profile) return false;
-      // 1 connect to the data base
-      await connectDb();
-      // 2 check if user exists.
-      console.log(profile);
-      const user = await User.findOne({ email: profile.email });
+      const gh = profile as GithubProfile;
 
-      // 3 if not create new user
+      await connectDb();
+
+      const user = await User.findOne({ email: gh.email });
+
       if (!user) {
         try {
           await User.create({
-            email: profile.email,
-            username: profile.login,
-            image: profile.avatar_url,
+            email: gh.email,
+            username: gh.login,
+            image: gh.avatar_url,
           });
         } catch (error) {
           console.log(error);
+          return false;
         }
       }
-      // 4 return true to allow sign in
       return true;
     },
-    async session({ session }) {
-      // get user from data base
-      console.log(session);
-      const user = await User.findOne({ email: session.user.email });
-      if (!user) return;
-      // assign user id from the session
 
-      // return session
-      if (session.user) return session;
+    async session({ session }) {
+      if (!session.user) return session;
+
+      const user = await User.findOne({ email: session.user.email });
+      if (user) {
+        session.user.id = user._id.toString();
+      }
+      return session;
     },
   },
 };
