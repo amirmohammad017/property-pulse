@@ -12,6 +12,7 @@ import {
 } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import Profile from "@/assets/images/profile.png";
 
 const Navbar = () => {
   const [providers, setProviders] = useState<Record<
@@ -21,6 +22,7 @@ const Navbar = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const pathName = usePathname();
   const { data: session } = useSession();
+  const profile = session?.user?.image;
 
   useEffect(() => {
     const setAuthProviders = async () => {
@@ -165,11 +167,11 @@ const Navbar = () => {
                     <span className="absolute -inset-1.5"></span>
                     <span className="sr-only">Open user menu</span>
                     <Image
-                      width={0}
-                      height={0}
+                      width={40}
+                      height={40}
                       className="h-9 w-9 rounded-full object-cover"
-                      src="/images/profile.png"
-                      alt=""
+                      src={profile || Profile}
+                      alt="Profile photo"
                     />
                   </button>
                 </div>
