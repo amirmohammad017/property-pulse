@@ -1,6 +1,10 @@
 import PropertyCard from "./PropertyCard";
-import type { Property } from "@/data/properties";
-const FeaturedProperties = ({ featured }: { featured: Property[] }) => {
+import type { PropertyDataWithId } from "@/models/Property";
+const FeaturedProperties = ({
+  featured,
+}: {
+  featured: PropertyDataWithId[];
+}) => {
   return (
     <>
       <section className="bg-blue-50 px-4 pt-6 pb-10">

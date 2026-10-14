@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaBath, FaBed, FaMapMarkerAlt, FaRulerCombined } from "react-icons/fa";
-import { propertyImage, type Property } from "@/data/properties";
 import { PropertyDataWithId } from "@/models/Property";
 export default function PropertyCard({
   property,
@@ -26,7 +25,7 @@ export default function PropertyCard({
         className={`relative h-56 ${featured ? "md:h-auto md:w-2/5 md:shrink-0" : ""}`}
       >
         <Image
-          src={propertyImage(property.images[0])}
+          src={property.images[0]}
           alt={property.name}
           fill
           sizes={

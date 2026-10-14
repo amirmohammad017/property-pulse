@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1150.0",
     "mongoose": "^8.24.4",
     "next": "16.3.8",
     "next-auth": "^4.24.15",

@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { properties } from "@/data/properties";
 import Hero from "./components/Hero";
 import FeaturedProperties from "./components/FeaturedProperties";
 import RecentProperties from "./components/RecentProperties";
+import connectDb from "@/config/database";
+import Property from "@/models/Property";
 
-export default function HomePage() {
+export default async function HomePage() {
+  await connectDb();
+  const rawProperties = await Property.find({}).sort({ createdAt: -1 }).lean();
+  const properties = rawProperties.map((p) => ({
+    ...p,
+    _id: p._id.toString(),
+    owner: p.owner.toString(),
+  }));
   const featured = properties
     .filter((property) => property.is_featured)
     .slice(0, 2);

@@ -10,14 +10,8 @@ import {
   FaRulerCombined,
   FaTimes,
 } from "react-icons/fa";
-import { properties, propertyImage } from "@/data/properties";
 import connectDb from "@/config/database";
 import Property from "@/models/Property";
-
-// Generate a detail page for each property in the local data.
-export function generateStaticParams() {
-  return properties.map((property) => ({ id: property._id }));
-}
 
 export default async function PropertyPage({
   params,
@@ -38,7 +32,7 @@ export default async function PropertyPage({
       {/* Main image and link back to the property list */}
       <div className="max-w-7xl mx-auto relative h-72 md:h-100">
         <Image
-          src={propertyImage(property.images[0])}
+          src={property.images[0]}
           alt={property.name}
           fill
           priority
@@ -158,7 +152,7 @@ export default async function PropertyPage({
               className="relative h-64 md:h-96 rounded-xl overflow-hidden"
             >
               <Image
-                src={propertyImage(image)}
+                src={image}
                 alt={`${property.name}, photo ${index + 1}`}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"

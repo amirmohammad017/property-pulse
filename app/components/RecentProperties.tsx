@@ -1,7 +1,7 @@
-import { Property } from "@/data/properties";
+import { PropertyDataWithId } from "@/models/Property";
 import PropertyCard from "./PropertyCard";
 
-const RecentProperties = ({ recent }: { recent: Property[] }) => {
+const RecentProperties = ({ recent }: { recent: PropertyDataWithId[] }) => {
   return (
     <>
       <section className="px-4 py-6">

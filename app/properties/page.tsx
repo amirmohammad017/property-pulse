@@ -17,10 +17,11 @@ export default async function PropertiesPage({
   searchParams: SearchParams;
 }) {
   await connectDb();
-  const rawProperties = await Property.find({}).lean();
+  const rawProperties = await Property.find({}).sort({ createdAt: -1 }).lean();
   const properties = rawProperties.map((p) => ({
     ...p,
     _id: p._id.toString(),
+    owner: p.owner.toString(),
   }));
   const {
     location = "",
