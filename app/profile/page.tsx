@@ -3,9 +3,10 @@ import { getSessionUser } from "@/utils/getSessionUser";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import profileDefault from "@/assets/images/profile.png";
-import Property from "@/models/Property";
+import Property, { PropertyDataWithId } from "@/models/Property";
 
-import ProfileProperties from "../components/ProfilePropertie";
+import ProfileProperties from "../components/ProfileProperties";
+import { convertToSerializableObject } from "@/utils/convertToObject";
 
 const ProfilePage = async () => {
   // Auth check: if there is no logged-in user, send them to sign-in
@@ -22,11 +23,10 @@ const ProfilePage = async () => {
   })
     .sort({ createdAt: -1 })
     .lean();
-  const properties = rawProperties.map((p) => ({
-    ...p,
-    _id: p._id.toString(),
-    owner: p.owner.toString(),
-  }));
+  const properties = rawProperties.map((item) =>
+    convertToSerializableObject(item),
+  ) as unknown as PropertyDataWithId[];
+
   return (
     <section className="bg-blue-50">
       <div className="container m-auto py-24">

@@ -64,6 +64,8 @@ type PropertyData = InferSchemaType<typeof PropertySchema>;
 export type PropertyDataWithId = Omit<PropertyData, "owner"> & {
   _id: string;
   owner: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 const Property =
