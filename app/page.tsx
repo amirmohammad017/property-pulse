@@ -3,16 +3,15 @@ import Hero from "./components/Hero";
 import FeaturedProperties from "./components/FeaturedProperties";
 import RecentProperties from "./components/RecentProperties";
 import connectDb from "@/config/database";
-import Property from "@/models/Property";
+import Property, { PropertyDataWithId } from "@/models/Property";
+import { convertToSerializableObject } from "@/utils/convertToObject";
 
 export default async function HomePage() {
   await connectDb();
   const rawProperties = await Property.find({}).sort({ createdAt: -1 }).lean();
-  const properties = rawProperties.map((p) => ({
-    ...p,
-    _id: p._id.toString(),
-    owner: p.owner.toString(),
-  }));
+  const properties = rawProperties.map((item) =>
+    convertToSerializableObject(item),
+  ) as unknown as PropertyDataWithId[];
   const featured = properties
     .filter((property) => property.is_featured)
     .slice(0, 2);

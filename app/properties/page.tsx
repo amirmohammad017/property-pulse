@@ -1,8 +1,9 @@
+import { convertToSerializableObject } from "@/utils/convertToObject";
 import Pagination from "../components/Pagination";
 import PropertyCard from "../components/PropertyCard";
 import PropertySearchForm from "../components/PropertySearchForm";
 import connectDb from "@/config/database";
-import Property from "@/models/Property";
+import Property, { PropertyDataWithId } from "@/models/Property";
 
 type SearchParams = Promise<{
   location?: string;
@@ -18,11 +19,9 @@ export default async function PropertiesPage({
 }) {
   await connectDb();
   const rawProperties = await Property.find({}).sort({ createdAt: -1 }).lean();
-  const properties = rawProperties.map((p) => ({
-    ...p,
-    _id: p._id.toString(),
-    owner: p.owner.toString(),
-  }));
+  const properties = rawProperties.map((item) =>
+    convertToSerializableObject(item),
+  ) as unknown as PropertyDataWithId[];
   const {
     location = "",
     propertyType = "All",

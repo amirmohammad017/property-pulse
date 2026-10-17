@@ -11,7 +11,8 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import connectDb from "@/config/database";
-import Property from "@/models/Property";
+import Property, { PropertyDataWithId } from "@/models/Property";
+import { convertToSerializableObject } from "@/utils/convertToObject";
 
 export default async function PropertyPage({
   params,
@@ -21,11 +22,13 @@ export default async function PropertyPage({
   await connectDb();
   // Read the [id] route parameter and find the matching property.
   const { id } = await params;
-  const rawProperties = await Property.findById(id).lean();
+  const rawProperty = await Property.findById(id).lean();
   // Show the 404 page when no property matches the URL.
-  if (!rawProperties) notFound();
+  if (!rawProperty) notFound();
 
-  const property = { ...rawProperties, _id: rawProperties?._id.toString() };
+  const property = convertToSerializableObject(
+    rawProperty,
+  ) as unknown as PropertyDataWithId;
 
   return (
     <>
