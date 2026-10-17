@@ -3,13 +3,29 @@ import { PropertyDataWithId } from "@/models/Property";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import deleteProperty from "../actions/deleteProperty";
 
 const ProfileProperties = ({
   properties: initialProperties,
 }: {
   properties: PropertyDataWithId[];
 }) => {
-  const [properties] = useState(initialProperties);
+  const [properties, setProperties] = useState(initialProperties);
+
+  const handleDeleteProperty = async (propertyId: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this property?",
+    );
+    if (!confirmed) return;
+
+    try {
+      await deleteProperty(propertyId);
+      setProperties((prev) => prev.filter((item) => item._id != propertyId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       {properties.map((p) => (
@@ -41,6 +57,7 @@ const ProfileProperties = ({
             <button
               className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600"
               type="button"
+              onClick={() => handleDeleteProperty(p._id)}
             >
               Delete
             </button>
