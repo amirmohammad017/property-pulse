@@ -52,7 +52,7 @@ const ProfileProperties = ({
           {/* Edit and delete actions */}
           <div className="mt-2">
             <Link
-              href={`/properties/edit/${p._id}`}
+              href={`/properties/${p._id}/edit`}
               className="bg-blue-500 text-white px-3 py-2 rounded-md mr-2 hover:bg-blue-600"
             >
               Edit
