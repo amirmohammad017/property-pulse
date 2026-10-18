@@ -13,6 +13,8 @@ import {
 import connectDb from "@/config/database";
 import Property, { PropertyDataWithId } from "@/models/Property";
 import { convertToSerializableObject } from "@/utils/convertToObject";
+import BookmarkButton from "@/app/components/BookmarkButton";
+import PropertyContactForm from "@/app/components/PropertyContactForm";
 
 export default async function PropertyPage({
   params,
@@ -126,22 +128,8 @@ export default async function PropertyPage({
 
           {/* --- Contact Property Manager: Contact details are shown here; messaging comes in a later stage. */}
           <aside className="space-y-4">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-bold mb-4">
-                Contact Property Manager
-              </h2>
-              <p className="font-semibold">{property.seller_info?.name}</p>
-              <a
-                className="text-blue-600 hover:underline break-all"
-                href={`mailto:${property.seller_info?.email}`}
-              >
-                {property.seller_info?.email}
-              </a>
-              <p className="mt-2">{property.seller_info?.phone}</p>
-              <p className="text-sm text-gray-500 mt-4">
-                Messaging and bookmarks are coming in a later stage.
-              </p>
-            </div>
+            <BookmarkButton property={property} />
+            <PropertyContactForm />
           </aside>
         </div>
       </section>
