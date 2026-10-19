@@ -15,6 +15,7 @@ import Property, { PropertyDataWithId } from "@/models/Property";
 import { convertToSerializableObject } from "@/utils/convertToObject";
 import BookmarkButton from "@/app/components/BookmarkButton";
 import PropertyContactForm from "@/app/components/PropertyContactForm";
+import ShareButtons from "@/app/components/ShareButtons";
 
 export default async function PropertyPage({
   params,
@@ -130,6 +131,7 @@ export default async function PropertyPage({
           <aside className="space-y-4">
             <BookmarkButton property={property} />
             <PropertyContactForm />
+            <ShareButtons property={property} />
           </aside>
         </div>
       </section>
