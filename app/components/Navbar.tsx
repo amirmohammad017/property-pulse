@@ -197,7 +197,7 @@ const Navbar = () => {
                     </Link>
 
                     <Link
-                      href="/saved-properties"
+                      href="/properties/saved"
                       className="block px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-blue-700"
                       role="menuitem"
                       tabIndex={-1}
