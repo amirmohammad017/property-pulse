@@ -1,5 +1,6 @@
 "use server";
 
+import connectDb from "@/config/database";
 import User from "@/models/User";
 import { getSessionUser } from "@/utils/getSessionUser";
 import { revalidatePath } from "next/cache";
@@ -14,6 +15,8 @@ async function bookmarkProperty(propertyId: string): Promise<BookmarkResult> {
     if (!sessionUser?.userId) {
       return { error: "You need to be signed in to bookmark a listing." };
     }
+
+    await connectDb();
 
     const user = await User.findById(sessionUser.userId);
     if (!user) {
