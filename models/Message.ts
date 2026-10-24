@@ -13,6 +13,11 @@ export interface IMessage {
   updatedAt?: Date;
 }
 
+export interface MessageState {
+  submitted?: boolean;
+  error?: string;
+}
+
 const MessageSchema = new Schema<IMessage>(
   {
     sender: {
