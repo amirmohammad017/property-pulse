@@ -130,7 +130,7 @@ export default async function PropertyPage({
           {/* --- Contact Property Manager: Contact details are shown here; messaging comes in a later stage. */}
           <aside className="space-y-4">
             <BookmarkButton property={property} />
-            <PropertyContactForm />
+            <PropertyContactForm property={property} />
             <ShareButtons property={property} />
           </aside>
         </div>
