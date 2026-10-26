@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import AuthProvider from "./components/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import { GlobalContextProvider } from "./context/GlobalContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,17 +26,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <AuthProvider>
-      <html
-        lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      >
-        <body className="min-h-full flex flex-col">
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <ToastContainer />
-        </body>
-      </html>
+      <GlobalContextProvider>
+        <html
+          lang="en"
+          className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        >
+          <body className="min-h-full flex flex-col">
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <ToastContainer />
+          </body>
+        </html>{" "}
+      </GlobalContextProvider>
     </AuthProvider>
   );
 }
