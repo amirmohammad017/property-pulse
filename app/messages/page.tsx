@@ -5,12 +5,17 @@ import { getSessionUser } from "@/utils/getSessionUser";
 import connectDb from "@/config/database";
 import Message from "@/models/Message";
 import { IMessage } from "@/models/Message";
+import Link from "next/link";
 
 type LeanMessage = Omit<IMessage, "sender" | "property"> & {
   _id: Types.ObjectId;
   sender: { _id: Types.ObjectId; username: string };
   property: { _id: Types.ObjectId; name: string };
   createdAt?: Date;
+};
+
+type MessagesPageProps = {
+  searchParams: Promise<{ filter?: string }>;
 };
 
 // تبدیل ObjectId به رشته قبل از پاس دادن به کامپوننت
@@ -26,8 +31,7 @@ const serialize = (m: LeanMessage): PopulatedMessage => ({
   createdAt: m.createdAt?.toISOString(),
 });
 
-const MessagesPage = async () => {
-  //   const messages = mockMessages.map(serialize);
+const MessagesPage = async ({ searchParams }: MessagesPageProps) => {
   const session = await getSessionUser();
   if (!session?.userId) {
     throw new Error("User ID is required. Please sign in.");
@@ -51,11 +55,15 @@ const MessagesPage = async () => {
     .sort({ createdAt: -1 })
     .lean();
 
-  const rawMessages = [...readMessages, ...unreadMessages];
+  const { filter } = await searchParams;
+  const showUnread = filter === "unread";
+  const rawMessages = [...unreadMessages, ...readMessages];
   const messages = (rawMessages as unknown as LeanMessage[]).map(serialize);
+  const visibleMessages = showUnread
+    ? messages.filter((m) => m.read == false)
+    : messages;
   const unreadCount = messages.filter((m) => !m.read).length;
 
-  console.log("--------------", readMessages, unreadMessages);
   return (
     <section className="min-h-screen bg-gray-50 py-10">
       <div className="mx-auto max-w-4xl px-4">
@@ -68,17 +76,33 @@ const MessagesPage = async () => {
             </p>
           </div>
           <div className="flex gap-3">
-            <span className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-gray-600 shadow-sm ring-1 ring-gray-200">
+            <Link
+              href="/messages"
+              scroll={false}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium shadow-sm ring-1 ring-gray-200 ${
+                !showUnread
+                  ? "bg-gray-900 text-white"
+                  : "bg-white text-gray-600"
+              }`}
+            >
               {messages.length} total
-            </span>
-            <span className="rounded-full bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white shadow-sm">
+            </Link>
+            <Link
+              href="/messages?filter=unread"
+              scroll={false}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold shadow-sm ${
+                showUnread
+                  ? "bg-blue-600 text-white ring-2 ring-blue-300"
+                  : "bg-blue-100 text-blue-700"
+              }`}
+            >
               {unreadCount} unread
-            </span>
+            </Link>
           </div>
         </header>
 
         {/* لیست یا حالت خالی */}
-        {messages.length === 0 ? (
+        {visibleMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-xl bg-white py-20 text-center shadow-sm ring-1 ring-gray-200">
             <FaInbox className="mb-4 text-5xl text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-700">
@@ -90,7 +114,7 @@ const MessagesPage = async () => {
           </div>
         ) : (
           <div className="grid gap-5">
-            {messages.map((m) => (
+            {visibleMessages.map((m) => (
               <MessageCard key={m._id} message={m} />
             ))}
           </div>
