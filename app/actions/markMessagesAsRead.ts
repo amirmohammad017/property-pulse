@@ -29,7 +29,7 @@ const markMessagesAsRead = async (
 
     message.read = !message.read;
     await message.save();
-    revalidatePath("/messages", "page");
+    revalidatePath("/messages", "layout");
 
     return { read: message.read };
   } catch (error) {
