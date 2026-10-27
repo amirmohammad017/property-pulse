@@ -16,6 +16,7 @@ import { convertToSerializableObject } from "@/utils/convertToObject";
 import BookmarkButton from "@/app/components/BookmarkButton";
 import PropertyContactForm from "@/app/components/PropertyContactForm";
 import ShareButtons from "@/app/components/ShareButtons";
+import PropertyImages from "@/app/components/PropertyImages";
 
 export default async function PropertyPage({
   params,
@@ -136,25 +137,8 @@ export default async function PropertyPage({
         </div>
       </section>
 
-      {/* Gallery of all images for this property */}
-      <section className="bg-blue-50 p-4">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {property.images.map((image, index) => (
-            <div
-              key={image}
-              className="relative h-64 md:h-96 rounded-xl overflow-hidden"
-            >
-              <Image
-                src={image}
-                alt={`${property.name}, photo ${index + 1}`}
-                fill
-                sizes="(max-width: 640px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Gallery of all images for this property (Client Component with lightbox) */}
+      <PropertyImages images={property.images} name={property.name} />
     </>
   );
 }

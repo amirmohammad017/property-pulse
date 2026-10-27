@@ -7,6 +7,7 @@ import AuthProvider from "./components/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { GlobalContextProvider } from "./context/GlobalContext";
+import "photoswipe/dist/photoswipe.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
