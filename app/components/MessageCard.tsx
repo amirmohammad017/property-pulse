@@ -4,6 +4,7 @@ import markMessagesAsRead from "../actions/markMessagesAsRead";
 import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 import deleteMessage from "../actions/deleteMessage";
+import { useGlobalContext } from "../context/GlobalContext";
 
 export interface PopulatedMessage {
   _id: string;
@@ -18,6 +19,7 @@ export interface PopulatedMessage {
 }
 
 const MessageCard = ({ message }: { message: PopulatedMessage }) => {
+  const { setUnreadMessages } = useGlobalContext();
   const initial = message.name?.charAt(0).toUpperCase() || "?";
   const date = message.createdAt
     ? new Date(message.createdAt).toLocaleString()
@@ -40,6 +42,9 @@ const MessageCard = ({ message }: { message: PopulatedMessage }) => {
       toast.success(
         `Message marked as ${result.read ? "read" : "new"} successfully.`,
       );
+      setUnreadMessages((prev) =>
+        Math.max(0, (prev ?? 0) + (result.read ? -1 : 1)),
+      );
     });
   };
 
@@ -47,6 +52,9 @@ const MessageCard = ({ message }: { message: PopulatedMessage }) => {
     startTransition(async () => {
       await deleteMessage(message._id);
       toast.success("Message deleted successfully.");
+      if (!isRead) {
+        setUnreadMessages((prev) => Math.max(0, (prev ?? 0) - 1));
+      }
       setIsDeleted(true);
     });
   };

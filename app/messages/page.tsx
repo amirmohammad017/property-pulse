@@ -37,6 +37,7 @@ const MessagesPage = async ({ searchParams }: MessagesPageProps) => {
     throw new Error("User ID is required. Please sign in.");
   }
   await connectDb();
+
   const readMessages = await Message.find({
     recipient: session.userId,
     read: true,
@@ -60,7 +61,7 @@ const MessagesPage = async ({ searchParams }: MessagesPageProps) => {
   const rawMessages = [...unreadMessages, ...readMessages];
   const messages = (rawMessages as unknown as LeanMessage[]).map(serialize);
   const visibleMessages = showUnread
-    ? messages.filter((m) => m.read == false)
+    ? messages.filter((m) => !m.read)
     : messages;
   const unreadCount = messages.filter((m) => !m.read).length;
 
@@ -106,10 +107,12 @@ const MessagesPage = async ({ searchParams }: MessagesPageProps) => {
           <div className="flex flex-col items-center justify-center rounded-xl bg-white py-20 text-center shadow-sm ring-1 ring-gray-200">
             <FaInbox className="mb-4 text-5xl text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-700">
-              No messages yet
+              {showUnread ? "No unread messages" : "No messages yet"}
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              When someone contacts you about a property, it will appear here.
+              {showUnread
+                ? "You're all caught up."
+                : "When someone contacts you about a property, it will appear here."}
             </p>
           </div>
         ) : (
