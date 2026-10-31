@@ -1,42 +1,34 @@
 # Property Pulse
 
-A rental property browsing app built as a learning project. This repository currently focuses on the frontend; property data and photos are stored locally so the app can run without a database or external service accounts.
+🔗 **Live demo:** [amirmohammad-dev.ir/projects/property-pulse](https://amirmohammad-dev.ir/projects/property-pulse)
 
-## Current features
+A rental property browsing app built as a learning project, based on Brad Traversy's Property Pulse course.
 
-- Home page with featured and recent properties
-- Property listing with location and type filters
-- Pagination that preserves the selected filters
-- Individual property pages with rates, amenities, contact details, and photo galleries
-- Responsive page layouts and custom error / not-found pages
+## ✨ Features
 
-Authentication, adding and editing listings, messages, bookmarks, image uploads, and a database are planned for later stages. Some navigation controls for these features are currently visual placeholders.
+- 🏠 Home page with featured and recent properties
+- 🔍 Property listing with location and type filters
+- 📄 Pagination that keeps the selected filters
+- 📍 Property details with rates, amenities, contact info, and photo gallery
+- 📱 Responsive layouts and custom error / not-found pages
 
-## Built with
+## 🛠️ Built with
 
-- Next.js 16 (App Router), React 19, and TypeScript
-- Tailwind CSS 4 and React Icons
-- Local JSON data and images during the frontend phase
+| Technology | Icon |
+| --- | --- |
+| Next.js 16 (App Router) | ![Next.js](https://img.shields.io/badge/Next.js_16-000000?logo=nextdotjs&logoColor=white) |
+| React 19 | ![React](https://img.shields.io/badge/React_19-61DAFB?logo=react&logoColor=black) |
+| TypeScript | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white) |
+| Tailwind CSS 4 | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-06B6D4?logo=tailwindcss&logoColor=white) |
+| React Icons | ![React Icons](https://img.shields.io/badge/React_Icons-E91E63?logo=react&logoColor=white) |
 
-## Run locally
-
-Install dependencies and start the development server:
-
+## 🚀 Run locally
 ```bash
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`. No environment variables or database are required for the current version.
-
-To check the project:
-
-```bash
-npm run lint
-npm run build
-```
-
-## Project structure
+## 📁 Project structure
 
 | Path | Purpose |
 | --- | --- |
@@ -44,10 +36,10 @@ npm run build
 | `app/properties/page.tsx` | Browse, filter, and paginate properties |
 | `app/properties/[id]/page.tsx` | Property details |
 | `app/components/` | Shared UI components |
-| `data/properties.json` | Temporary sample listings |
-| `data/properties.ts` | Property type and local image helper |
+| `data/properties.json` | Sample listings |
+| `data/properties.ts` | Property type and image helper |
 | `public/images/properties/` | Sample property photos |
 
-## Learning project credit
+## 🙏 Credit
 
-This is an independent practice implementation inspired by Brad Traversy's Property Pulse project and its supplied HTML theme. It is being built step by step, with a database and other backend features to follow. The current sample photos and branding come from the reference materials.
+An independent practice implementation inspired by [Brad Traversy](https://github.com/bradtraversy)'s Property Pulse project and its HTML theme. Sample photos and branding come from the reference materials.
